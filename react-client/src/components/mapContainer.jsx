@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Map from 'google-maps-react';
-import Autocomplete from './autocomplete.jsx';
+import AutocompleteInput from './autocomplete.jsx';
 import {GoogleApiWrapper} from 'google-maps-react';
 import GOOGLE_API_KEY from '../google/googleAPI.js';
 import Paper from 'material-ui/Paper';
@@ -124,6 +124,9 @@ export class MapContainer extends React.Component {
         >
           <PinCreator style={{opacity: 1}}/>
         </Drawer>
+        <AutocompleteInput
+          google={this.props.google} 
+          searchPlace={this.searchLocation.bind(this)}/>
         <Map google={this.props.google} style={this.styles.mapFlexBox}
           onClick={this.handleClick.bind(this)}
           centerAroundCurrentLocation={this.state.centerAroundCurrentLocation}
@@ -135,11 +138,9 @@ export class MapContainer extends React.Component {
           anchorOrigin={{'horizontal': 'left', 'vertical': 'bottom'}}
           targetOrigin={{'horizontal': 'right', 'vertical': 'bottom'}}
           onRequestClose={this.handleRequestClose.bind(this)}
+          style={{height: 250}}
         >
           <Menu>
-            <Autocomplete
-              google={this.props.google} 
-              searchPlace={this.searchLocation.bind(this)}/>
           </Menu>
         </Popover>
         <FloatingSearchButton 

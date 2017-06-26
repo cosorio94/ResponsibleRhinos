@@ -19,7 +19,13 @@ export class MapContainer extends React.Component {
     super(props);
     this.state = {
       drawerIsOpen: true,
-      searchIsOpen: false
+      searchIsOpen: false,
+      initialMapCenter: {
+        lat: 37,
+        lng: -122
+      },
+      zoom: 15,
+      centerAroundCurrentLocation: true
     };
     this.styles = {
       refresh: {
@@ -41,19 +47,23 @@ export class MapContainer extends React.Component {
     };
   }
 
-  handleSearchTap = (event) => {
+  handleSearchTap(event) {
     event.preventDefault();
     this.setState({
       searchIsOpen: !this.state.searchIsOpen,
       searchAnchorEl: event.currentTarget
-    })
+    });
   }
 
-  handleRequestClose = () => {
+  handleRequestClose() {
     this.setState({
       searchIsOpen: false,
     });
-  };
+  }
+
+  handleClick(mapProps, map, clickEvent) {
+    console.log('event: ', clickEvent);
+  }
 
   render() {
     if (!this.props.loaded) {
@@ -75,7 +85,9 @@ export class MapContainer extends React.Component {
         >
           <PinCreator style={{opacity: 1}}/>
         </Drawer>
-        <Map google={this.props.google} style={this.styles.mapFlexBox} />
+        <Map google={this.props.google} style={this.styles.mapFlexBox}
+          onClick={this.handleClick.bind(this)}
+          centerAroundCurrentLocation={this.state.centerAroundCurrentLocation}/>
         <Popover
           open={this.state.searchIsOpen}
           anchorEl={this.state.searchAnchorEl}

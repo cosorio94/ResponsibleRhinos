@@ -11,7 +11,12 @@ export class MapContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hi: 'hi'
+      initialMapCenter: {
+        lat: 37,
+        lng: -122
+      },
+      zoom: 15,
+      centerAroundCurrentLocation: true
     }
     this.styles = {
       refresh: {
@@ -28,6 +33,10 @@ export class MapContainer extends React.Component {
     }
   }
 
+  handleClick(mapProps, map, clickEvent) {
+    console.log('event: ', clickEvent);
+  }
+
   render() {
     if (!this.props.loaded) {
       return (
@@ -42,7 +51,9 @@ export class MapContainer extends React.Component {
     }
     return (
       <Paper zDepth={4} >
-        <Map google={this.props.google} style={this.styles.mapFlexBox}/>
+        <Map google={this.props.google} style={this.styles.mapFlexBox}
+          onClick={this.handleClick.bind(this)}
+          centerAroundCurrentLocation={this.state.centerAroundCurrentLocation}/>
       </Paper>
     );
   }

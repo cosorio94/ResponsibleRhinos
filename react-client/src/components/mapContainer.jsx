@@ -11,8 +11,8 @@ export class MapContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      initialMapCenter: {
-        lat: 37,
+      currentCenter: {
+        lat: 44,
         lng: -122
       },
       zoom: 15,
@@ -33,8 +33,25 @@ export class MapContainer extends React.Component {
     };
   }
 
+  setMapStateCenter(center) {
+    this.setState({
+      currentCenter: window.map.getCenter()
+    });
+  }
+
   handleClick(mapProps, map, clickEvent) {
     console.log('event: ', clickEvent);
+  }
+
+  mapReady(mapProps, map) {
+    window.map = map;
+    this.setMapStateCenter(map.getCenter());
+    console.log('center: ', this.state.currentCenter);
+  }
+
+  centerMoved(mapProps, map) {
+    this.setMapStateCenter(map.getCenter());
+    console.log('center: ', this.state.currentCenter);
   }
 
   render() {
@@ -53,7 +70,9 @@ export class MapContainer extends React.Component {
       <Paper zDepth={4} >
         <Map google={this.props.google} style={this.styles.mapFlexBox}
           onClick={this.handleClick.bind(this)}
-          centerAroundCurrentLocation={this.state.centerAroundCurrentLocation}/>
+          centerAroundCurrentLocation={this.state.centerAroundCurrentLocation}
+          onReady={this.mapReady.bind(this)}
+          onDragend={this.centerMoved.bind(this)}/>
       </Paper>
     );
   }

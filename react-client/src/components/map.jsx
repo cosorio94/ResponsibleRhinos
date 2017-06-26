@@ -1,5 +1,7 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
+import ReactDOM from 'react-dom';
+
 
 class Map extends React.Component{ 
 
@@ -31,7 +33,7 @@ class Map extends React.Component{
       const center = new maps.LatLng(38, 122);
       const mapConfig = Object.assign({}, {
         center: center,
-        zoom: zoom
+        zoom: 5
       });
       this.map = new maps.Map(node, mapConfig);
     }
@@ -39,9 +41,9 @@ class Map extends React.Component{
 
   render() {
     return (
-    <Paper className="mainMap" ref='map'>
+    <div className="mainMap" ref='map'>
       Loading map...
-    </Paper>
+    </div>
     );
   }
 }

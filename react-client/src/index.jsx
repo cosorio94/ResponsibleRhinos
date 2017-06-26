@@ -23,7 +23,7 @@ class App extends Component {
           <Header />
             <div>
               <PinCreator/>
-              <MainMap/>
+              
             </div>
           <PinInfo/>
           <MapContainer/>

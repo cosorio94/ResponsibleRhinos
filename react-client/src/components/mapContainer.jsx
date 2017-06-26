@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Map from 'google-maps-react';
+import Autocomplete from './autocomplete.jsx';
 import {GoogleApiWrapper} from 'google-maps-react';
 import GOOGLE_API_KEY from '../google/googleAPI.js';
 import Paper from 'material-ui/Paper';
@@ -71,19 +72,21 @@ export class MapContainer extends React.Component {
     });
   }
   
-  componentDidMount() {
-    this.renderAutoComplete();
-    // this.setState({
-    //   searchIsOpen: false
-    // });
-  }
-
-  componentDidUpdate(prevProps) {
-    const {google} = this.props;
-    const map = window.map;
-    if (map !== prevProps.map) {
-      this.renderAutoComplete();
+  searchLocation(place, map) {
+    if (!place.geometry) { return; }
+    
+    if (place.geometry.viewport) {
+      map.fitBounds(place.geometry.viewport);
+    } else {
+      map.setCenter(place.geometry.location);
+      map.setZoom(17);
     }
+    
+    this.setMapStateCenter();
+    this.setState({
+      currentPlace: place,
+      currentPlacePosition: place.geometry.location
+    });
   }
 
   handleClick(mapProps, map, clickEvent) {
@@ -99,40 +102,6 @@ export class MapContainer extends React.Component {
   centerMoved(mapProps, map) {
     this.setMapStateCenter();
     console.log('center: ', this.state.zoom);
-  }
-
-  textChange(event) {
-    console.log(event.target.value);
-  }
-  
-  renderAutoComplete() {
-    const {google} = this.props;
-    const map = window.map;
-    if (!google || !map) { return; }
-    
-    const autocompleteRef = this.refs.autocomplete;
-    console.log(this.refs);
-    const autocompleteNode = ReactDOM.findDOMNode(autocompleteRef);
-    var autocomplete = new google.maps.places.Autocomplete(autocompleteNode);
-    autocomplete.bindTo('bounds', map);
-    
-    autocomplete.addListener('place', () => {
-      const place = autocomplete.getPlace();
-      if (!place.geometry) { return; }
-      
-      if (place.geometry.viewport) {
-        map.fitBounds(place.geometry.viewport);
-      } else {
-        map.setCenter(place.geometry.location);
-        map.setZoom(17);
-      }
-      
-      this.setMapStateCenter();
-      this.setState({
-        currentPlace: place,
-        currentPlacePosition: place.geometry.location
-      });
-    });
   }
 
   render() {
@@ -168,12 +137,9 @@ export class MapContainer extends React.Component {
           onRequestClose={this.handleRequestClose.bind(this)}
         >
           <Menu>
-            <MenuItem>
-              <input
-                type="text" 
-                ref="autocomplete" 
-                onChange={this.textChange.bind(this)}/>
-            </MenuItem>
+            <Autocomplete
+              google={this.props.google} 
+              searchPlace={this.searchLocation.bind(this)}/>
           </Menu>
         </Popover>
         <FloatingSearchButton 

@@ -17,7 +17,7 @@ export class MapContainer extends React.Component {
       },
       zoom: 15,
       centerAroundCurrentLocation: true
-    }
+    };
     this.styles = {
       refresh: {
         position: 'relative'
@@ -30,7 +30,7 @@ export class MapContainer extends React.Component {
         paddingTop: '5em',
         paddingRight: '2em', 
       }
-    }
+    };
   }
 
   handleClick(mapProps, map, clickEvent) {

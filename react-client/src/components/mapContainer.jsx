@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Map from 'google-maps-react';
 import {GoogleApiWrapper} from 'google-maps-react';
 import GOOGLE_API_KEY from '../google/googleAPI.js';
@@ -25,7 +26,9 @@ export class MapContainer extends React.Component {
         lng: -122
       },
       zoom: 15,
-      centerAroundCurrentLocation: true
+      centerAroundCurrentLocation: true,
+      currentPlace: null,
+      currentPlacePosition: null
     };
     this.styles = {
       refresh: {
@@ -41,7 +44,7 @@ export class MapContainer extends React.Component {
       },
       searchButton: {
         position: 'fixed',
-        bottom: '1em',
+        bottom: '5em',
         right: '1em'
       }
     };
@@ -61,10 +64,26 @@ export class MapContainer extends React.Component {
     });
   }
 
-  setMapStateCenter(center) {
+  setMapStateCenter() {
     this.setState({
-      currentCenter: window.map.getCenter()
+      currentCenter: window.map.getCenter(),
+      zoom: window.map.getZoom()
     });
+  }
+  
+  componentDidMount() {
+    this.renderAutoComplete();
+    // this.setState({
+    //   searchIsOpen: false
+    // });
+  }
+
+  componentDidUpdate(prevProps) {
+    const {google} = this.props;
+    const map = window.map;
+    if (map !== prevProps.map) {
+      this.renderAutoComplete();
+    }
   }
 
   handleClick(mapProps, map, clickEvent) {
@@ -73,13 +92,47 @@ export class MapContainer extends React.Component {
 
   mapReady(mapProps, map) {
     window.map = map;
-    this.setMapStateCenter(map.getCenter());
-    console.log('center: ', this.state.currentCenter);
+    this.setMapStateCenter();
+    console.log('center: ', this.state.zoom);
   }
 
   centerMoved(mapProps, map) {
-    this.setMapStateCenter(map.getCenter());
-    console.log('center: ', this.state.currentCenter);
+    this.setMapStateCenter();
+    console.log('center: ', this.state.zoom);
+  }
+
+  textChange(event) {
+    console.log(event.target.value);
+  }
+  
+  renderAutoComplete() {
+    const {google} = this.props;
+    const map = window.map;
+    if (!google || !map) { return; }
+    
+    const autocompleteRef = this.refs.autocomplete;
+    console.log(this.refs);
+    const autocompleteNode = ReactDOM.findDOMNode(autocompleteRef);
+    var autocomplete = new google.maps.places.Autocomplete(autocompleteNode);
+    autocomplete.bindTo('bounds', map);
+    
+    autocomplete.addListener('place', () => {
+      const place = autocomplete.getPlace();
+      if (!place.geometry) { return; }
+      
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+        map.setZoom(17);
+      }
+      
+      this.setMapStateCenter();
+      this.setState({
+        currentPlace: place,
+        currentPlacePosition: place.geometry.location
+      });
+    });
   }
 
   render() {
@@ -105,26 +158,28 @@ export class MapContainer extends React.Component {
         <Map google={this.props.google} style={this.styles.mapFlexBox}
           onClick={this.handleClick.bind(this)}
           centerAroundCurrentLocation={this.state.centerAroundCurrentLocation}
-          centerAroundCurrentLocation={this.state.centerAroundCurrentLocation}
           onReady={this.mapReady.bind(this)}
           onDragend={this.centerMoved.bind(this)}/>
         <Popover
           open={this.state.searchIsOpen}
           anchorEl={this.state.searchAnchorEl}
-          anchorOrigin={{"horizontal":"left","vertical":"bottom"}}
-          targetOrigin={{"horizontal":"right","vertical":"bottom"}}
-          onRequestClose={this.handleRequestClose}
+          anchorOrigin={{'horizontal': 'left', 'vertical': 'bottom'}}
+          targetOrigin={{'horizontal': 'right', 'vertical': 'bottom'}}
+          onRequestClose={this.handleRequestClose.bind(this)}
         >
           <Menu>
             <MenuItem>
-              <TextField hintText="Address" />
+              <input
+                type="text" 
+                ref="autocomplete" 
+                onChange={this.textChange.bind(this)}/>
             </MenuItem>
           </Menu>
         </Popover>
         <FloatingSearchButton 
           style={this.styles.searchButton}
           mini={true}
-          onTouchTap={this.handleSearchTap}
+          onTouchTap={this.handleSearchTap.bind(this)}
         >
           <Sherlock/>
         </FloatingSearchButton>

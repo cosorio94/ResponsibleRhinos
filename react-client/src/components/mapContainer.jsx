@@ -1,7 +1,9 @@
 import React from 'react';
 import Map from 'google-maps-react';
-import {GoogleApiWrapper} from 'GoogleMapsReactComponent';
+import {GoogleApiWrapper} from 'google-maps-react';
 import GOOGLE_API_KEY from '../google/googleAPI.js';
+import Paper from 'material-ui/Paper';
+
 
 export class MapContainer extends React.Component { 
 
@@ -18,9 +20,9 @@ export class MapContainer extends React.Component {
       height: '100px'
     };
     return (
-    <div className="mapContainer" style={style}>
+    <Paper className="mapContainer" style={style}>
       <Map google={this.props.google} />
-    </div>
+    </Paper>
     );
   }
 }

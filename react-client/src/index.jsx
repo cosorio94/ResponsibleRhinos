@@ -1,6 +1,6 @@
-import React, { Component }from 'react';
+import React, { Component } from 'react';
 import { render } from 'react-dom';
-import injectTapEventPlugin from "react-tap-event-plugin";
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MainMap from './components/map.jsx';
 import PinCreator from './components/pincreator.jsx';
@@ -29,7 +29,7 @@ class App extends Component {
           <MapContainer/>
         </div>
       </MuiThemeProvider>
-    )
+    );
   }
 }
 

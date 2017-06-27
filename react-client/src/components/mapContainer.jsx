@@ -89,12 +89,13 @@ export class MapContainer extends React.Component {
       currentPlace: place,
       currentPlacePosition: place.geometry.location
     });
+    console.log(this.state.currentPlacePosition);
   }
 
   handleClick(mapProps, map, clickEvent) {
     // console.log('event: ', clickEvent);
     if (this.state.markerOn) {
-      console.log('mark!');
+      console.log(this.props.children);
       var markers = this.state.markers;
       markers.push({
         position: clickEvent.latLng
@@ -174,6 +175,14 @@ export class MapContainer extends React.Component {
           centerAroundCurrentLocation={this.state.centerAroundCurrentLocation}
           onReady={this.mapReady.bind(this)}
           onDragend={this.centerMoved.bind(this)}>
+          {this.state.markers.map((marker, index, markers) => {
+            console.log('markers: ', index, marker);
+            return (
+              <Marker
+                key={index}
+                position={marker.position}/>
+            );
+          })}
           <Marker position={this.state.currentPlacePosition}
             name={'Joes sandwich'}/>
         </Map>

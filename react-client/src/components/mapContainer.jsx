@@ -89,13 +89,12 @@ export class MapContainer extends React.Component {
       currentPlace: place,
       currentPlacePosition: place.geometry.location
     });
-    console.log(this.state.currentPlacePosition);
   }
 
   handleClick(mapProps, map, clickEvent) {
     // console.log('event: ', clickEvent);
     if (this.state.markerOn) {
-      console.log(this.props.children);
+      // console.log(this.props.children);
       var markers = this.state.markers;
       markers.push({
         position: clickEvent.latLng
@@ -107,7 +106,7 @@ export class MapContainer extends React.Component {
         markers: markers,
         markerOn: false
       });
-      console.log(this.state.markers);
+      // console.log(this.state.markers);
     }
   }
 
@@ -117,12 +116,12 @@ export class MapContainer extends React.Component {
     this.setState({
       currentPlacePosition: this.state.currentCenter
     });
-    console.log('center: ', this.state.zoom);
+    // console.log('center: ', this.state.zoom);
   }
 
   centerMoved(mapProps, map) {
     this.setMapStateCenter();
-    console.log('center: ', this.state.zoom);
+    // console.log('center: ', this.state.zoom);
   }
 
   handleSearchTap(event) {
@@ -139,7 +138,7 @@ export class MapContainer extends React.Component {
     });
   }
   
-  selectPin() {
+  selectPin(e) {
     this.setState({
       markerOn: !this.state.markerOn
     });

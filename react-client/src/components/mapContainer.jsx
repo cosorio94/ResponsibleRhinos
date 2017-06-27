@@ -29,7 +29,9 @@ export class MapContainer extends React.Component {
       zoom: 15,
       centerAroundCurrentLocation: true,
       currentPlace: null,
-      currentPlacePosition: null
+      // currentPlacePosition: this.state.currentCenter,
+      markers: [],
+      markerOn: false
     };
     this.styles = {
       refresh: {
@@ -90,12 +92,30 @@ export class MapContainer extends React.Component {
   }
 
   handleClick(mapProps, map, clickEvent) {
-    console.log('event: ', clickEvent);
+    // console.log('event: ', clickEvent);
+    if (this.state.markerOn) {
+      console.log('mark!');
+      var markers = this.state.markers;
+      markers.push({
+        position: clickEvent.latLng
+        // icon: {
+        //   path: 
+        // }
+      });
+      this.setState({
+        markers: markers,
+        markerOn: false
+      });
+      console.log(this.state.markers);
+    }
   }
 
   mapReady(mapProps, map) {
     window.map = map;
     this.setMapStateCenter();
+    this.setState({
+      currentPlacePosition: this.state.currentCenter
+    });
     console.log('center: ', this.state.zoom);
   }
 
@@ -117,6 +137,12 @@ export class MapContainer extends React.Component {
       searchIsOpen: false,
     });
   }
+  
+  selectPin() {
+    this.setState({
+      markerOn: !this.state.markerOn
+    });
+  }
 
   render() {
     if (!this.props.loaded) {
@@ -136,7 +162,9 @@ export class MapContainer extends React.Component {
           open={this.state.drawerIsOpen}
           containerStyle={{marginTop: '10em', height: '25em', width: 80, opacity: 1}}
         >
-          <PinCreator style={{opacity: 1}}/>
+          <PinCreator 
+            style={{opacity: 1}}
+            onPinClick={this.selectPin.bind(this)}/>
         </Drawer>
         <AutocompleteInput
           google={this.props.google} 
@@ -146,7 +174,7 @@ export class MapContainer extends React.Component {
           centerAroundCurrentLocation={this.state.centerAroundCurrentLocation}
           onReady={this.mapReady.bind(this)}
           onDragend={this.centerMoved.bind(this)}>
-          <Marker position={this.state.currentCenter}
+          <Marker position={this.state.currentPlacePosition}
             name={'Joes sandwich'}/>
         </Map>
         <Popover

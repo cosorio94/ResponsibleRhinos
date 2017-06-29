@@ -82,7 +82,6 @@ export class MapContainer extends React.Component {
         icon: this.state.currentIcon
       }
       this.props.addMarker(marker);         
-      // console.log(this.props.children);
       // var markers = this.state.markers;
       // markers.push({
       //   position: clickEvent.latLng,

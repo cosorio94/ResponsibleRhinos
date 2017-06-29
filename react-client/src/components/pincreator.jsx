@@ -55,10 +55,33 @@ class PinCreator extends Component {
 
   handle(e) {
     e.preventDefault();
-    this.props.onPinClick(e);
+    this.props.onPinClick(this.getPinAttributes(e.target));
     this.props.close();
-    console.log('123', e.target);
+    console.log('123', this.getPinAttributes(e.target));
+    console.log('4: ', e.target.tagName);
+    console.log('pin: ', e.target);
+  }
 
+  getPinAttributes(node) {
+    if (node.tagName === 'svg') {
+      return this.getAttributesFromSvg(node);
+    } else if (node.tagName === 'path') {
+      return this.getAttributesFromPath(node);
+    }
+  }
+
+  getAttributesFromSvg(node) {
+    var pinAttributes = {
+      path: node.firstChild.getAttribute('d')
+    };
+    return pinAttributes;
+  }
+
+  getAttributesFromPath(node) {
+    var pinAttributes = {
+      path: node.getAttribute('d')
+    };
+    return pinAttributes;
   }
 
   render() {

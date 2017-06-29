@@ -47,11 +47,17 @@ class mapView extends React.Component {
       .catch(err => console.log('signedIn error:', err));
   }
 
-  addMarker(position) {
-    let markers = this.state.markers;
-    markers.push({
-      position: position
-    });
+  // addMarker(position) {
+  //   let markers = this.state.markers;
+  //   markers.push({
+  //     position: position
+  //   });
+
+  // Changed this function to accept a marker object instead of only a position.
+  addMarker(marker){
+    console.log("Currently the marker list is:", this.state.markers);
+    var markers = this.state.markers;
+    markers.push(marker);
     this.setState({
       markers: markers
     });

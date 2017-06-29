@@ -76,14 +76,23 @@ class PinCreator extends Component {
     var pinAttributes = {
       path: node.firstChild.getAttribute('d'),
       fillOpacity: 1.0,
-      fillColor: styles.fill
+      fillColor: styles.fill,
+      strokeColor: styles.color,
+      strokeOpacity: 0.0,
+      anchor: new window.google.maps.Point(10, 10)
     };
     return pinAttributes;
   }
 
   getAttributesFromPath(node) {
+    var styles = this.parsePinStyle(node.parentNode);
     var pinAttributes = {
-      path: node.getAttribute('d')
+      path: node.getAttribute('d'),
+      fillOpacity: 1.0,
+      fillColor: styles.fill,
+      strokeColor: styles.color,
+      strokeOpacity: 0,
+      anchor: new window.google.maps.Point(10, 10)
     };
     return pinAttributes;
   }

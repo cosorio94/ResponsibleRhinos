@@ -71,8 +71,12 @@ class PinCreator extends Component {
   }
 
   getAttributesFromSvg(node) {
+    console.log('hey:', this.parsePinStyle(node));
+    var styles = this.parsePinStyle(node);
     var pinAttributes = {
-      path: node.firstChild.getAttribute('d')
+      path: node.firstChild.getAttribute('d'),
+      fillOpacity: 1.0,
+      fillColor: styles.fill
     };
     return pinAttributes;
   }
@@ -82,6 +86,16 @@ class PinCreator extends Component {
       path: node.getAttribute('d')
     };
     return pinAttributes;
+  }
+
+  parsePinStyle(node) {
+    var stylesArray = node.getAttribute('style').split('; ');
+    var styles = {};
+    stylesArray.forEach((style, index, stylesArray) => {
+      var currentStyle = style.split(': ');
+      styles[currentStyle[0]] = currentStyle[1];
+    });
+    return styles;
   }
 
   render() {

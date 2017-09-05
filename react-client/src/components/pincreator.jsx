@@ -50,10 +50,10 @@ const tiles = [
 class PinCreator extends Component {
   constructor(props) {
     super(props);
-    this.handle = this.handle.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
-  handle(e) {
+  handleSelect(e) {
     e.preventDefault();
     this.props.onPinClick(this.getPinAttributes(e.target));
     this.props.close();
@@ -115,7 +115,7 @@ class PinCreator extends Component {
         >
           {tiles.map((tile, index) => {
             return (
-              <GridTile key={index} onTouchTap={(e) => this.handle(e)} >
+              <GridTile key={index} onTouchTap={(e) => this.handleSelect(e)} >
                 {tile}
               </GridTile>
             );

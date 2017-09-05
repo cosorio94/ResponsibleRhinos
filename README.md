@@ -1,4 +1,4 @@
-# Mad Map Apps
+# Mad Maps
 
 ![Alt text](https://travis-ci.org/ResponsibleRhinos/ResponsibleRhinos.svg?branch=master)
 ![Alt text](https://github.com/cosorio94/ResponsibleRhinos/blob/master/MadMapsUI.png)

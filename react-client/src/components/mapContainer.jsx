@@ -12,7 +12,7 @@ import TextField from 'material-ui/TextField';
 import Menu from 'material-ui/Menu';
 import GOOGLE_API_KEY from '../google/google.js';
 import MenuItem from 'material-ui/MenuItem';
-import PinSelection from './pindrawer.jsx';
+import PinDrawer from './pindrawer.jsx';
 import shortid from 'shortid';
 
 
@@ -22,7 +22,6 @@ export class MapContainer extends React.Component {
     super(props);
     this.state = {
       drawerIsOpen: true,
-      searchIsOpen: false,
       pin: false,
       centerAroundCurrentLocation: true,
       currentPlace: {},
@@ -85,24 +84,11 @@ export class MapContainer extends React.Component {
 
   mapReady(mapProps, map) {
     window.map = map;
+    this.props.updateCenter(this.props.currentCenter);
     map.setZoom(this.props.zoom);
     map.setCenter(this.props.currentCenter);
     map.addListener('zoom_changed', ()=>{
       this.props.updateZoom(map.getZoom());
-    });
-  }
-
-  handleSearchTap(event) {
-    event.preventDefault();
-    this.setState({
-      searchIsOpen: !this.state.searchIsOpen,
-      searchAnchorEl: event.currentTarget
-    });
-  }
-
-  handleRequestClose() {
-    this.setState({
-      searchIsOpen: false,
     });
   }
 
@@ -149,7 +135,7 @@ export class MapContainer extends React.Component {
             );
           })}
         </Map>
-        <PinSelection
+        <PinDrawer
           onPinClick={this.selectPin.bind(this)}
         />
       </div>

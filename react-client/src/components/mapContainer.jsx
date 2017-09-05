@@ -13,6 +13,8 @@ import Menu from 'material-ui/Menu';
 import GOOGLE_API_KEY from '../google/google.js';
 import MenuItem from 'material-ui/MenuItem';
 import PinSelection from './pindrawer.jsx';
+import shortid from 'shortid';
+
 
 export class MapContainer extends React.Component {
 
@@ -58,20 +60,21 @@ export class MapContainer extends React.Component {
       map.setCenter(place.geometry.location);
       map.setZoom(17);
     }
-    this.props.updateCenter(window.map.getCenter());
-    this.props.updateZoom(window.map.getZoom());
+    this.props.updateCenter(map.getCenter());
+    this.props.updateZoom(map.getZoom());
   }
-  handleMarkerClicker(props, marker, e, index){
+
+  handleMarkerClicker(index){
     this.props.setCurrPin(index);
   }
 
   handleClick(mapProps, map, clickEvent) {
     if (this.state.markerOn) {
-      console.log("The lat long is:",clickEvent.latLng);
       var marker = {
         position: clickEvent.latLng,
         icon: this.state.currentIcon,
-        info: ''
+        info: '',
+        id: shortid.generate()
       };
       this.props.addMarker(marker);
       this.setState({
@@ -82,7 +85,6 @@ export class MapContainer extends React.Component {
 
   mapReady(mapProps, map) {
     window.map = map;
-    this.props.updateCenter(this.props.currentCenter);
     map.setZoom(this.props.zoom);
     map.setCenter(this.props.currentCenter);
     map.addListener('zoom_changed', ()=>{
@@ -129,7 +131,8 @@ export class MapContainer extends React.Component {
           google={this.props.google}
           searchPlace={this.searchLocation.bind(this)}
         />
-        <Map google={this.props.google} style={this.styles.mapFlexBox}
+        <Map google={this.props.google} 
+          style={this.styles.mapFlexBox}
           onClick={this.handleClick.bind(this)}
           onReady={this.mapReady.bind(this)}
           onDragend={this.centerMoved.bind(this)}
@@ -138,8 +141,8 @@ export class MapContainer extends React.Component {
           {this.props.markers.map((marker, index, markers) => {
             return (
               <Marker
-                onClick={(props, marker, e) => {this.handleMarkerClicker(props, marker, e, index);}}
-                key={index}
+                onClick={(props, marker, e) => {this.handleMarkerClicker(index);}}
+                key={marker.id}
                 position={marker.position}
                 icon={marker.icon}
               />

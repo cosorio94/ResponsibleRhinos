@@ -36,10 +36,6 @@ export class Autocomplete extends React.Component {
     });
   }
   
-  // textChange(event) {
-  //   console.log(event.target.value);
-  // }
-  
   render() {
     return (
       <input

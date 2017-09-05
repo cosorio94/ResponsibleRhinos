@@ -26,7 +26,6 @@ class mapView extends React.Component {
       mapId: null,
       currPin: null
     };
-    // this.MapContainer2;
     this.updateCenter = this.updateCenter.bind(this);
     this.updateZoom = this.updateZoom.bind(this);
     this.addMarker = this.addMarker.bind(this);
@@ -36,27 +35,12 @@ class mapView extends React.Component {
     this.setCurrPin = this.setCurrPin.bind(this);
     this.updateCurrPinInfo = this.updateCurrPinInfo.bind(this);
   }
+
   setCurrPin(index) {
-    console.log("updating curr pin in app");
     this.setState({
       currPin: index
     });
   }
-
-  // componentWillMount() {
-  //   axios.get('/api')
-  //     .then((res) => {
-  //       console.log("Setting window api key", window.GOOGLE_API_KEY);
-  //       //window.GOOGLE_API_KEY = res.data.GOOGLE_API_KEY;
-  //       // import MapContainer from './components/mapContainer.jsx';
-  //       // this.MapContainer2 = GoogleApiWrapper({
-  //       //   apiKey: window.GOOGLE_API_KEY
-  //       // })(MapContainer);
-  //     })
-  //     .catch(err => {
-  //       console.log('Cannot get api key:', err);
-  //     });
-  // }
 
   componentDidMount() {
     let mapId = window.location.href.split('=')[1];
@@ -72,15 +56,8 @@ class mapView extends React.Component {
       .catch(err => console.log('signedIn error:', err));
   }
 
-  // addMarker(position) {
-  //   let markers = this.state.markers;
-  //   markers.push({
-  //     position: position
-  //   });
-
   // Changed this function to accept a marker object instead of only a position.
   addMarker(marker){
-    console.log("Currently the marker list is:", this.state.markers);
     var markers = this.state.markers;
     markers.push(marker);
     this.setState({
@@ -121,10 +98,8 @@ class mapView extends React.Component {
   }
 
   fetch(id) {
-    console.log("About to run a get request for the state");
     axios.get(`/map/${id}`)
       .then(res => {
-        console.log("got the data:", res.data);
         this.setState(res.data);
       })
       .catch(err => console.log('get error:', err));
@@ -142,9 +117,8 @@ class mapView extends React.Component {
       zoom: zoom
     });
   }
-  updateCurrPinInfo(text){
-    console.log("Update the curr pin with", text);
 
+  updateCurrPinInfo(text){
     let markers = this.state.markers;
     markers[this.state.currPin].info = text;
     this.setState({

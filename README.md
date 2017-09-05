@@ -1,6 +1,8 @@
 # Mad Map Apps
 
 ![Alt text](https://travis-ci.org/ResponsibleRhinos/ResponsibleRhinos.svg?branch=master)
+![Alt text](https://github.com/cosorio94/ResponsibleRhinos/blob/master/MadMapsUI.png)
+
 
 ## TODO
 - [ ] Fix Bug With Securing the Google API Key

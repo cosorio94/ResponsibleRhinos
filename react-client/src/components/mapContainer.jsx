@@ -21,11 +21,9 @@ export class MapContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      drawerIsOpen: true,
       pin: false,
-      centerAroundCurrentLocation: true,
-      currentPlace: {},
       markerOn: false
+      // centerAroundCurrentLocation: true,
     };
     this.styles = {
       refresh: {

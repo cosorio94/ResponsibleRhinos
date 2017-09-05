@@ -116,6 +116,7 @@ export class MapContainer extends React.Component {
         <AutocompleteInput
           google={this.props.google}
           searchPlace={this.searchLocation.bind(this)}
+          map={window.map}
         />
         <Map google={this.props.google} 
           style={this.styles.mapFlexBox}
@@ -145,7 +146,6 @@ export class MapContainer extends React.Component {
 
 
 
-// export default MapContainer;
 export default GoogleApiWrapper({
   apiKey: GOOGLE_API_KEY
 })(MapContainer);

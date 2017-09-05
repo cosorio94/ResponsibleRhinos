@@ -21,10 +21,6 @@ class PinInfo extends React.Component {
     };
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log('props: ', this.props);
-  }
-
   render() {
     return (
       <Paper

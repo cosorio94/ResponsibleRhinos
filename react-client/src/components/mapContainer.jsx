@@ -82,6 +82,7 @@ export class MapContainer extends React.Component {
 
   mapReady(mapProps, map) {
     window.map = map;
+    this.props.updateCenter(this.props.currentCenter);
     map.setZoom(this.props.zoom);
     map.setCenter(this.props.currentCenter);
     map.addListener('zoom_changed', ()=>{

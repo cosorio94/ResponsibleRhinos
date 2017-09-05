@@ -67,33 +67,28 @@ class PinCreator extends Component {
     }
   }
 
-  getAttributesFromSvg(node) {
-    var styles = this.parsePinStyle(node);
-    var pinAttributes = {
-      path: node.firstChild.getAttribute('d'),
+  getGeneralAttributes(node, styles) {
+    return {
       fillOpacity: 1.0,
       fillColor: styles.fill,
       strokeColor: styles.color,
       strokeOpacity: 0.0,
       anchor: new window.google.maps.Point(10, 10)
-    };
-    return pinAttributes;
+    }
+  }
+
+  getAttributesFromSvg(node) {
+    var styles = this.parsePinStyle(node);
+    return Object.assign(this.getGeneralAttributes(node, styles), {
+      path: node.firstChild.getAttribute('d'),
+    });
   }
 
   getAttributesFromPath(node) {
     var styles = this.parsePinStyle(node.parentNode);
-    var pinAttributes = {
+    return Object.assign(this.getGeneralAttributes(node, styles), {
       path: node.getAttribute('d'),
-      fillOpacity: 1.0,
-      fillColor: styles.fill,
-      strokeColor: styles.color,
-      strokeOpacity: 0,
-      anchor: {
-        x: 10,
-        y: 10
-      }
-    };
-    return pinAttributes;
+    });
   }
 
   parsePinStyle(node) {

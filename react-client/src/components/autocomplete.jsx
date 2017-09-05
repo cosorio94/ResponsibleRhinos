@@ -9,8 +9,7 @@ export class Autocomplete extends React.Component {
   }
   
   componentDidUpdate(prevProps) {
-    const {google} = this.props;
-    const map = window.map;
+    const {google, map} = this.props;
     if (map !== prevProps.map) {
       this.renderAutoComplete();
     }
@@ -21,8 +20,7 @@ export class Autocomplete extends React.Component {
   }
   
   renderAutoComplete() {
-    const {google} = this.props;
-    const map = window.map;
+    const {google, map} = this.props;
     if (!google || !map) { return; }
     
     const autocompleteRef = this.refs.autocomplete;
@@ -35,10 +33,6 @@ export class Autocomplete extends React.Component {
       this.props.searchPlace(place, map);
     });
   }
-  
-  // textChange(event) {
-  //   console.log(event.target.value);
-  // }
   
   render() {
     return (

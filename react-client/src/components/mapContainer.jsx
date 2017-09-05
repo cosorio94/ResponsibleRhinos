@@ -12,7 +12,9 @@ import TextField from 'material-ui/TextField';
 import Menu from 'material-ui/Menu';
 import GOOGLE_API_KEY from '../google/google.js';
 import MenuItem from 'material-ui/MenuItem';
-import PinSelection from './pindrawer.jsx';
+import PinDrawer from './pindrawer.jsx';
+import shortid from 'shortid';
+
 
 export class MapContainer extends React.Component {
 
@@ -20,7 +22,6 @@ export class MapContainer extends React.Component {
     super(props);
     this.state = {
       drawerIsOpen: true,
-      searchIsOpen: false,
       pin: false,
       centerAroundCurrentLocation: true,
       currentPlace: {},
@@ -58,20 +59,21 @@ export class MapContainer extends React.Component {
       map.setCenter(place.geometry.location);
       map.setZoom(17);
     }
-    this.props.updateCenter(window.map.getCenter());
-    this.props.updateZoom(window.map.getZoom());
+    this.props.updateCenter(map.getCenter());
+    this.props.updateZoom(map.getZoom());
   }
-  handleMarkerClicker(props, marker, e, index){
+
+  handleMarkerClicker(index){
     this.props.setCurrPin(index);
   }
 
   handleClick(mapProps, map, clickEvent) {
     if (this.state.markerOn) {
-      console.log("The lat long is:",clickEvent.latLng);
       var marker = {
         position: clickEvent.latLng,
         icon: this.state.currentIcon,
-        info: ''
+        info: '',
+        id: shortid.generate()
       };
       this.props.addMarker(marker);
       this.setState({
@@ -87,20 +89,6 @@ export class MapContainer extends React.Component {
     map.setCenter(this.props.currentCenter);
     map.addListener('zoom_changed', ()=>{
       this.props.updateZoom(map.getZoom());
-    });
-  }
-
-  handleSearchTap(event) {
-    event.preventDefault();
-    this.setState({
-      searchIsOpen: !this.state.searchIsOpen,
-      searchAnchorEl: event.currentTarget
-    });
-  }
-
-  handleRequestClose() {
-    this.setState({
-      searchIsOpen: false,
     });
   }
 
@@ -128,8 +116,10 @@ export class MapContainer extends React.Component {
         <AutocompleteInput
           google={this.props.google}
           searchPlace={this.searchLocation.bind(this)}
+          map={window.map}
         />
-        <Map google={this.props.google} style={this.styles.mapFlexBox}
+        <Map google={this.props.google} 
+          style={this.styles.mapFlexBox}
           onClick={this.handleClick.bind(this)}
           onReady={this.mapReady.bind(this)}
           onDragend={this.centerMoved.bind(this)}
@@ -138,15 +128,15 @@ export class MapContainer extends React.Component {
           {this.props.markers.map((marker, index, markers) => {
             return (
               <Marker
-                onClick={(props, marker, e) => {this.handleMarkerClicker(props, marker, e, index);}}
-                key={index}
+                onClick={(props, marker, e) => {this.handleMarkerClicker(index);}}
+                key={marker.id}
                 position={marker.position}
                 icon={marker.icon}
               />
             );
           })}
         </Map>
-        <PinSelection
+        <PinDrawer
           onPinClick={this.selectPin.bind(this)}
         />
       </div>
@@ -156,7 +146,6 @@ export class MapContainer extends React.Component {
 
 
 
-// export default MapContainer;
 export default GoogleApiWrapper({
   apiKey: GOOGLE_API_KEY
 })(MapContainer);

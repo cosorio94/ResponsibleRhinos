@@ -57,9 +57,6 @@ class PinCreator extends Component {
     e.preventDefault();
     this.props.onPinClick(this.getPinAttributes(e.target));
     this.props.close();
-    console.log('123', this.getPinAttributes(e.target));
-    console.log('4: ', e.target.tagName);
-    console.log('pin: ', e.target);
   }
 
   getPinAttributes(node) {
@@ -71,7 +68,6 @@ class PinCreator extends Component {
   }
 
   getAttributesFromSvg(node) {
-    console.log('hey:', this.parsePinStyle(node));
     var styles = this.parsePinStyle(node);
     var pinAttributes = {
       path: node.firstChild.getAttribute('d'),
